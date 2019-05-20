@@ -53,6 +53,16 @@ Example records:
 "test2"   {"op":"add","item":"World"}
 ```
 
+Given the above example input records, one would expect to see the following output records from the consumer:
+```
+"test"   {"items":["foo"]}
+"test"   {"items":["foo", "bar"]}
+"test"   {"items":["foo", "bar", "baz"]}
+"test"   {"items":["foo", "baz"]}
+"test2"   {"items":["Hello"]}
+"test2"   {"items":["Hello", "World"]}
+```
+
 ### Run the app via the Clojure repl in cider (or similar)
 
 Open `src/demo.clj` in your editor (emacs) and start a repl.
