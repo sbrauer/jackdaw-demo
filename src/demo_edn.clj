@@ -1,4 +1,4 @@
-(ns demo
+(ns demo-edn
   "A jackdaw demo app. Listens for commands to add/del items to a set."
   (:require [clojure.tools.logging :as log]
             [jackdaw.serdes.resolver :as resolver]
@@ -45,8 +45,8 @@
 (defn aggregate
   [{:keys [items] :as agg} [k {:keys [op item] :as v}]]
   {:items (case op
-            "add" (conj items item)
-            "del" (disj items item)
+            :add (conj items item)
+            :del (disj items item)
             items)})
 
 (defn topology-builder
@@ -100,7 +100,7 @@
   ;; Evaluate the form using `C-c C-v C-f e`:
   (reset)
 
-  (publish (:input topic-metadata) "key1" {:op "add" :item "squirrel"})
+  (publish (:input topic-metadata) "key1" {:op :add :item "squirrel"})
 
   (get-keyvals (:output topic-metadata))
 )
