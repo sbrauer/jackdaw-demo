@@ -84,7 +84,7 @@
 
 (defn publish
   "Takes a topic config and record value, and (optionally) a key and
-  parition number, and produces to a Kafka topic."
+  partition number, and produces to a Kafka topic."
   ([topic-config value]
    (with-open [client (jc/producer (kafka-producer-config) topic-config)]
      @(jc/produce! client topic-config value))
