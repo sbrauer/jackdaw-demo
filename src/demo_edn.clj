@@ -33,14 +33,13 @@
 
 (def topic-metadata
   (reduce-kv (fn [m k v]
-               (assoc m k
-                      (assoc v
-                             :key-serde (resolve-serde (:key-serde v))
-                             :value-serde (resolve-serde (:value-serde v)))))
+               (assoc m k (-> v
+                              (update :key-serde resolve-serde)
+                              (update :value-serde resolve-serde))))
              {}
              +topic-metadata+))
 
-(def initialize (constantly {:items #{}}))
+(def agg-init {:items #{}})
 
 (defn aggregate
   [{:keys [items] :as agg} [k {:keys [op item] :as v}]]
@@ -55,7 +54,7 @@
     (-> (j/kstream builder (:input topic-metadata))
         (j/peek (fn [[k v]] (log/info (str {:key k :value v}))))
         (j/group-by-key)
-        (j/aggregate initialize
+        (j/aggregate (constantly agg-init)
                      aggregate
                      (:output topic-metadata))
         (j/to-kstream)

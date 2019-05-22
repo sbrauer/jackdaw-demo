@@ -64,7 +64,7 @@
              {}
              +topic-metadata+))
 
-(def initialize (constantly {:items []}))
+(def agg-init {:items []})
 
 (defn aggregate
   [{:keys [items] :as agg} [k {:keys [op item] :as v}]]
@@ -79,7 +79,7 @@
     (-> (j/kstream builder (:input topic-metadata))
         (j/peek (fn [[k v]] (log/info (str {:key k :value v}))))
         (j/group-by-key)
-        (j/aggregate initialize
+        (j/aggregate (constantly agg-init)
                      aggregate
                      (:output topic-metadata))
         (j/to-kstream)
