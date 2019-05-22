@@ -58,10 +58,9 @@
 
 (def topic-metadata
   (reduce-kv (fn [m k v]
-               (assoc m k
-                      (assoc v
-                             :key-serde (resolve-serde (:key-serde v))
-                             :value-serde (resolve-serde (:value-serde v)))))
+               (assoc m k (-> v
+                              (update :key-serde resolve-serde)
+                              (update :value-serde resolve-serde))))
              {}
              +topic-metadata+))
 
